@@ -172,7 +172,12 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
 
   @Override
   public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-    completionHandler.complete(Messages.AuthResult.SUCCESS);
+    BiometricPrompt.CryptoObject cryptoObject = result.getCryptoObject();
+    if (cryptoObject != null ) {
+      completionHandler.complete(Messages.AuthResult.SUCCESS);
+    } else {
+      completionHandler.complete(Messages.AuthResult.FAILURE);
+    }
     stop();
   }
 
