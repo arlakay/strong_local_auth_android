@@ -26,6 +26,7 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import java.util.concurrent.Executor;
+import android.util.Log;
 
 /**
  * Authenticates the user with biometrics and sends corresponding response back to Flutter.
@@ -52,6 +53,8 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
   private final UiThreadExecutor uiThreadExecutor;
   private boolean activityPaused = false;
   private BiometricPrompt biometricPrompt;
+
+  private final String TAG = "AuthenticationHelper";
 
   AuthenticationHelper(
       Lifecycle lifecycle,
@@ -120,7 +123,10 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
       lifecycle.removeObserver(this);
       return;
     }
-    activity.getApplication().unregisterActivityLifecycleCallbacks(this);
+
+    if(activity != null && activity.getApplication() != null ){
+      activity.getApplication().unregisterActivityLifecycleCallbacks(this);
+    }
   }
 
   @SuppressLint("SwitchIntDef")
@@ -172,12 +178,10 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
 
   @Override
   public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-    BiometricPrompt.CryptoObject cryptoObject = result.getCryptoObject();
-    if (cryptoObject != null ) {
-      completionHandler.complete(Messages.AuthResult.SUCCESS);
-    } else {
-      completionHandler.complete(Messages.AuthResult.FAILURE);
-    }
+    // BiometricPrompt.CryptoObject cryptoObject = result.getCryptoObject();
+    // Log.d(TAG, "This is a debug log cryptoObject = " + cryptoObject);
+
+    completionHandler.complete(Messages.AuthResult.SUCCESS);   
     stop();
   }
 
