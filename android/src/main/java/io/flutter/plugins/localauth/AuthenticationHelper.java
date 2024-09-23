@@ -54,8 +54,6 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
   private boolean activityPaused = false;
   private BiometricPrompt biometricPrompt;
 
-  private final String TAG = "AuthenticationHelper";
-
   AuthenticationHelper(
       Lifecycle lifecycle,
       FragmentActivity activity,
@@ -124,9 +122,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
       return;
     }
 
-    if(activity != null && activity.getApplication() != null ){
-      activity.getApplication().unregisterActivityLifecycleCallbacks(this);
-    }
+    activity.getApplication().unregisterActivityLifecycleCallbacks(this);
   }
 
   @SuppressLint("SwitchIntDef")
@@ -178,9 +174,6 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
 
   @Override
   public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-    // BiometricPrompt.CryptoObject cryptoObject = result.getCryptoObject();
-    // Log.d(TAG, "This is a debug log cryptoObject = " + cryptoObject);
-
     completionHandler.complete(Messages.AuthResult.SUCCESS);   
     stop();
   }
